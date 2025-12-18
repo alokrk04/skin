@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Test History - Epi Scan</title>
+    <link href="../static/assets/favicon.ico" rel="icon">
+    <link href="../static/assets/apple-touch-icon.png" rel="apple-touch-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="../static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/assets/css/main.css" rel="stylesheet">
+    <style>
+        /* Add your existing styles here */
+        .test-card {
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+            margin-bottom: 25px;
+            transition: transform 0.3s ease;
+            border: 1px solid #e0e0e0;
+        }
+
+        /* Add chat styling */
+        .chat-container {
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+        }
+
+        .chat-message {
+            margin-bottom: 10px;
+        }
+
+        .user-message {
+            font-weight: bold;
+        }
+
+        .gemini-reply {
+            color: #007bff;
+        }
+
+        .chatbox {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 15px;
+            background-color: #f8f9fa;
+        }
+
+        .input-group {
+            display: flex;
+            margin-top: 10px;
+        }
+
+        .input-group input {
+            flex: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <header id="header" class="header d-flex align-items-center fixed-top">
+        <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+            <a href="{{ url_for('first') }}" class="logo d-flex align-items-center">
+                <h1 class="sitename">Epi Scan</h1> <span>.</span>
+            </a>
+            <nav id="navmenu" class="navmenu">
+                <ul>
+                    <li><a href="{{url_for('first')}}">Home</a></li>
+                    <li><a href="{{url_for('index')}}">Upload</a></li>
+                    <li><a href="{{url_for('previous')}}">Previous Test</a></li>
+                    <li><a href="{{url_for('first')}}">Logout</a></li>
+                </ul>
+                <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="page-title" data-aos="fade">
+            <div class="container position-relative">
+                <h1>Your Test History</h1>
+                <nav class="breadcrumbs">
+                    <ol>
+                        <li><a href="{{ url_for('index') }}">Home</a></li>
+                        <li class="current">Test History</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <section class="section">
+            <div class="container">
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h2><i class="bi bi-clock-history me-2"></i>Previous Tests</h2>
+                            <span class="badge bg-primary">{{ tests|length }} tests</span>
+                        </div>
+                    </div>
+                </div>
+
+                {% if tests %}
+                <div class="row">
+                    {% for test in tests %}
+                    <div class="col-lg-4 col-md-6">
+                        <div class="test-card">
+                            <div class="test-image">
+                                <img src="{{ url_for('static', filename='tests/' + test.image_filename) }}"
+                                     alt="Skin lesion image"
+                                     class="img-fluid">
+                            </div>
+                            <div class="test-body">
+                                <h5>{{ test.patient_name }}</h5>
+                                <p class="test-date">
+                                    <i class="bi bi-calendar me-1"></i>
+                                    {{ test.formatted_date }}
+                                </p>
+                                <div class="test-result
+                                    {% if test.result == 'Melanoma' %}result-melanoma
+                                    {% elif test.result in ['Basal cell carcinoma', 'Actinic keratoses'] %}result-warning
+                                    {% else %}result-benign{% endif %}">
+                                    {{ test.result }}
+                                </div>
+                                <div class="action-buttons mt-3">
+                                    <a href="{{ url_for('static', filename='reports/' + test.pdf_filename.split('/')[-1]) }}"
+                                       target="_blank"
+                                       class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-eye me-1"></i> View Report
+                                    </a>
+                                    <a href="{{ url_for('static', filename='reports/' + test.pdf_filename.split('/')[-1]) }}"
+                                       download
+                                       class="btn btn-sm btn-outline-success">
+                                        <i class="bi bi-download me-1"></i> Download
+                                    </a>
+                                    <button class="btn btn-sm btn-outline-info mt-2"
+                                            onclick="openChat('{{ test.patient_name }}', '{{ test.result }}')">
+                                        <i class="bi bi-chat-dots me-1"></i> Discuss Result
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <i class="bi bi-folder-x"></i>
+                    <h3>No Tests Found</h3>
+                    <p class="text-muted">You haven't submitted any skin lesion tests yet.</p>
+                    <a href="{{ url_for('index') }}" class="btn btn-primary mt-3">
+                        <i class="bi bi-plus-circle me-1"></i> Submit New Test
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+
+        <div class="modal fade" id="geminiChatModal" tabindex="-1" aria-labelledby="geminiChatModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="geminiChatModalLabel">Discuss Test Result</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong id="chat-patient-name"></strong> - Result: <span id="chat-test-result" class="fw-bold"></span></p>
+                        <div id="chatbox" class="chatbox">
+                            </div>
+                        <div class="input-group">
+                            <input type="text" id="user-input" class="form-control" placeholder="Ask a question about the result">
+                            <button class="btn btn-primary" onclick="sendMessage()">Send</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer id="footer" class="footer">
+        <div class="container footer-top">
+            <div class="row gy-4">
+                <div class="col-lg-4 col-md-6 footer-about">
+                    <a href="{{ url_for('first') }}" class="logo d-flex align-items-center">
+                        <span class="sitename">Epi Scan</span>
+                    </a>
+                    <div class="mt-2">
+                        <p>Advanced skin lesion analysis powered by AI</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container copyright text-center mt-4">
+            <p>© <span>Copyright</span> <strong class="px-1 sitename">Epi Scan</strong> <span>All Rights Reserved</span></p>
+        </div>
+    </footer>
+
+    <script src="../static/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let currentPatientName = '';
+        let currentTestResult = '';
+        const chatbox = document.getElementById('chatbox');
+        const userInput = document.getElementById('user-input');
+        const chatPatientNameDisplay = document.getElementById('chat-patient-name');
+        const chatTestResultDisplay = document.getElementById('chat-test-result');
+        const chatModal = new bootstrap.Modal(document.getElementById('geminiChatModal'));
+
+        function openChat(patientName, testResult) {
+            currentPatientName = patientName;
+            currentTestResult = testResult;
+            chatPatientNameDisplay.textContent = patientName;
+            chatTestResultDisplay.textContent = testResult;
+            chatbox.innerHTML = ''; // Clear previous chat
+            chatModal.show();
+        }
+
+        async function sendMessage() {
+            const message = userInput.value.trim();
+            if (message) {
+                appendMessage('user', message);
+                userInput.value = '';
+
+                // Replace with your actual Gemini API endpoint and logic
+                const geminiResponse = await fetch('/api/gemini', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        patient_name: currentPatientName,
+                        test_result: currentTestResult,
+                        user_message: message,
+                    }),
+                });
+
+                if (geminiResponse.ok) {
+                    const data = await geminiResponse.json();
+                    appendMessage('gemini', data.reply);
+                } else {
+                    appendMessage('gemini', 'Error communicating with AI.');
+                }
+            }
+        }
+
+        function appendMessage(sender, text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('chat-message');
+            if (sender === 'user') {
+                messageDiv.classList.add('user-message');
+                messageDiv.textContent = `You: ${text}`;
+            } else if (sender === 'gemini') {
+                messageDiv.classList.add('gemini-reply');
+                messageDiv.textContent = `Epi Scan AI: ${text}`;
+            }
+            chatbox.appendChild(messageDiv);
+            chatbox.scrollTop = chatbox.scrollHeight; // Scroll to the bottom
+        }
+    </script>
+</body>
+
+</html>

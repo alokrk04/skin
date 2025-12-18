@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Diagnosis Result - Epi Scan</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="../static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/assets/css/main.css" rel="stylesheet">
+    <style>
+        .diagnosis-card {
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: none;
+            overflow: hidden;
+        }
+        .diagnosis-header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 1.5rem;
+            border-bottom: 4px solid #3498db;
+        }
+        .result-badge {
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+        }
+        .lesion-image {
+            max-height: 400px;
+            object-fit: contain;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .report-section {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        .action-btn {
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        .severity-melanoma {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .severity-benign {
+            background-color: #2ecc71;
+            color: white;
+        }
+        .severity-warning {
+            background-color: #f39c12;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <header id="header" class="header d-flex align-items-center fixed-top">
+        <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+            <a href="{{ url_for('previous') }}" class="logo d-flex align-items-center">
+                <h1 class="sitename">Epi Scan</h1> <span>.</span>
+            </a>
+            <nav id="navmenu" class="navmenu">
+                <ul>
+                    <li><a href="{{ url_for('previous') }}"><i class="bi bi-clock-history me-1"></i> History</a></li>
+                    <li><a href="{{ url_for('logout') }}"><i class="bi bi-box-arrow-right me-1"></i> Logout</a></li>
+                </ul>
+                <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main mt-5 pt-5">
+        <div class="container py-4">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="diagnosis-card card mb-4">
+                        <!-- Card Header -->
+                        <div class="diagnosis-header text-center">
+                            <h3 class="mb-0"><i class="bi bi-clipboard2-pulse me-2"></i>Diagnosis Report</h3>
+                        </div>
+
+                        <!-- Card Body -->
+                        <div class="card-body p-4">
+                            <!-- Patient Info -->
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <p class="mb-2"><strong><i class="bi bi-person me-2"></i>Patient:</strong> {{ patient_name }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="mb-2"><strong><i class="bi bi-calendar me-2"></i>Date:</strong> {{ upload_date }}</p>
+                                </div>
+                            </div>
+
+                            <!-- Diagnosis Result -->
+                            <div class="text-center mb-4">
+                                <h4 class="mb-3">Analysis Result</h4>
+                                <span class="result-badge
+                                    {% if prediction == 'Melanoma' %}severity-melanoma
+                                    {% elif prediction in ['Basal cell carcinoma', 'Actinic keratoses'] %}severity-warning
+                                    {% else %}severity-benign{% endif %}">
+                                    {{ prediction }}
+                                </span>
+                                {% if prediction == 'Melanoma' %}
+                                <div class="alert alert-danger mt-3">
+                                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                    <strong>Important:</strong> This result suggests a potentially serious condition. Please consult a dermatologist immediately.
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Lesion Image -->
+                            <div class="text-center my-4">
+                                <h5 class="mb-3"><i class="bi bi-image me-2"></i>Skin Lesion</h5>
+                                <img src="{{ img_path }}" class="lesion-image img-fluid" alt="Skin lesion image">
+                            </div>
+
+                            <!-- PDF Report -->
+                            <div class="report-section">
+                                <h5 class="mb-3"><i class="bi bi-file-earmark-pdf me-2"></i>Detailed Report</h5>
+                                <p class="mb-4">Your comprehensive diagnostic report is ready, containing:</p>
+                                <ul class="mb-4">
+                                    <li>High-resolution lesion image</li>
+                                    <li>Detailed diagnosis explanation</li>
+                                    <li>Clinical recommendations</li>
+                                    <li>Test metadata and timestamps</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-3">
+                                    <a href="{{ pdf_url }}" class="btn btn-primary action-btn" target="_blank">
+                                        <i class="bi bi-eye me-2"></i>View Report
+                                    </a>
+                                    <a href="{{ pdf_url }}" download class="btn btn-success action-btn">
+                                        <i class="bi bi-download me-2"></i>Download PDF
+                                    </a>
+                                    <a href="{{ url_for('previous') }}" class="btn btn-outline-secondary action-btn">
+                                        <i class="bi bi-list-ul me-2"></i>View All Tests
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer id="footer" class="footer">
+        <div class="container footer-top">
+            <div class="row gy-4">
+                <div class="col-lg-4 col-md-6 footer-about">
+                    <a href="{{ url_for('first') }}" class="logo d-flex align-items-center">
+                        <span class="sitename">Epi Scan</span>
+                    </a>
+                    <div class="mt-3">
+                        <p>Advanced skin lesion analysis powered by AI</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container copyright text-center mt-4">
+            <p>© <span>Copyright</span> <strong class="px-1 sitename">Epi Scan</strong> <span>All Rights Reserved</span></p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- Bootstrap JS -->
+    <script src="../static/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Add active class to nav items
+        document.addEventListener('DOMContentLoaded', function() {
+            const navItems = document.querySelectorAll('.navmenu ul li a');
+            navItems.forEach(item => {
+                if (item.href === window.location.href) {
+                    item.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

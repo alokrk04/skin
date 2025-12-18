@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Home - Epi Scan</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <link href="../static/assets/favicon.ico" rel="icon">
+  <link href="../static/assets/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts, Bootstrap, etc. -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
+
+  <link href="../static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../static/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="../static/assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="../static/assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+  <link href="../static/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="../static/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <link href="../static/assets/css/main.css" rel="stylesheet">
+
+</head>
+
+<body class="index-page">
+
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+
+      <a href="index.html" class="logo d-flex align-items-center">
+        <img src="../static/assets/aa.png" alt="Epi Scan Logo" style="height: 40px; margin-right: 10px;">
+        <h1 class="sitename">Epi Scan</h1>
+        <span></span>
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="{{ url_for('first') }}">Home</a></li>
+          <li><a href="{{ url_for('login') }}">Login</a></li>
+          <li><a href="{{ url_for('register') }}">Register</a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+
+    </div>
+  </header>
+
+  <main class="main">
+    <section id="hero" class="hero section">
+      <div class="info d-flex align-items-center">
+
+        <section id="contact" class="contact section">
+          <div class="container" data-aos="fade-up" data-aos-delay="100">
+            <div class="row gy-4 mt-1">
+              <div class="col-lg-6" data-aos="fade-up" data-aos-delay="300">
+                <img src="https://assets-global.website-files.com/60658b47b03f0c77e8c14884/630d7b2da3b2846da3fe1afa_web-app-guide.png"
+                  frameborder="0" style="border:0; width: 100%; height: 400px;" loading="lazy"
+                  referrerpolicy="no-referrer-when-downgrade">
+              </div>
+
+              <div class="col-lg-6">
+                <form method="POST" action="{{ url_for('register') }}" class="php-email-form" data-aos="fade-up"
+                  data-aos-delay="400">
+                  <center>
+                    <h1 class="m-4">Create an Account</h1>
+                  </center>
+                  <div class="row gy-4 mt-4">
+                    <div class="col-md-12">
+                      <input type="text" name="username" class="form-control" placeholder="Username" required="">
+                    </div>
+                    <div class="col-md-12">
+                      <input type="email" name="email" class="form-control" placeholder="Email" required="">
+                    </div>
+                    <div class="col-md-12">
+                      <input type="password" name="password" class="form-control" placeholder="Password" required="">
+                    </div>
+                    <div class="col-md-12">
+                      <input type="password" name="confirm_password" class="form-control" placeholder="Confirm Password"
+                        required="">
+                    </div>
+                    <div class="col-md-12 text-center">
+                      <button type="submit" class="btn btn-warning">Register</button>
+                    </div>
+                  </div>
+                </form>
+
+                <!-- Flash Success/Failure Message -->
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <div class="alert alert-success mt-4">
+                  <ul>
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                  </ul>
+                </div>
+                {% endif %}
+                {% endwith %}
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+      </div>
+    </section>
+  </main>
+
+  <footer id="footer" class="footer">
+    <div class="container footer-top">
+      <div class="row gy-4">
+        <div class="col-lg-4 col-md-6 footer-about">
+          <a href="index.html" class="logo d-flex align-items-center">
+            <span class="sitename">Epi Scan</span>
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="container copyright text-center mt-4">
+      <p>© <span>Copyright</span> <strong class="px-1 sitename">Epi Scan</strong> <span>All Rights Reserved</span></p>
+    </div>
+
+  </footer>
+
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+
+  <div id="preloader"></div>
+
+  <script src="../static/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!--  <script src="../static/assets/vendor/php-email-form/validate.js"></script>-->
+  <script src="../static/assets/vendor/aos/aos.js"></script>
+  <script src="../static/assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="../static/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+  <script src="../static/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="../static/assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="../static/assets/vendor/purecounter/purecounter_vanilla.js"></script>
+
+  <script src="../static/assets/js/main.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Upload - EpiScan</title>
+
+  <link href="../static/assets/favicon.ico" rel="icon">
+  <link href="../static/assets/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&family=Poppins:wght@400;500;600&display=swap"
+    rel="stylesheet">
+
+  <link href="../static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../static/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="../static/assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="../static/assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+  <link href="../static/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="../static/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="../static/assets/css/main.css" rel="stylesheet">
+
+  <style>
+    /* Global Styles */
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f4f7fc;
+      color: #333;
+    }
+
+    header {
+      background-color: #3e4a89;
+      padding: 20px 0;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .sitename {
+      color: #fff;
+      font-weight: 700;
+      font-size: 24px;
+      margin-left: 10px;
+    }
+
+    nav ul li a {
+      color: #fff;
+      font-weight: 500;
+      text-transform: uppercase;
+      padding: 10px 20px;
+      transition: 0.3s;
+    }
+
+    nav ul li a:hover {
+      background-color: #ff7c2a;
+      color: #fff;
+      border-radius: 4px;
+    }
+
+    .page-title {
+      background-color: #4e73df;
+      color: #fff;
+      padding: 50px 0;
+      text-align: center;
+      background-image: url('/static/a.gif'); /* Update the background image reference */
+      background-size: cover;
+      background-position: center;
+    }
+
+    .page-title h1 {
+      font-size: 36px;
+      font-weight: 700;
+    }
+
+    .breadcrumbs a {
+      color: #ff7c2a;
+      font-weight: 500;
+    }
+
+    .breadcrumbs li.current {
+      color: #fff;
+    }
+
+    .services .service-item {
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      padding: 30px;
+      text-align: center;
+      transition: 0.3s ease;
+    }
+
+    .services .service-item:hover {
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      transform: translateY(-10px);
+    }
+
+    .services .service-item .icon i {
+      font-size: 40px;
+      color: #3e4a89;
+      margin-bottom: 20px;
+    }
+
+    .services .service-item h3 {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .btn-warning {
+      background-color: #ff7c2a;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 4px;
+      transition: 0.3s ease;
+    }
+
+    .btn-warning:hover {
+      background-color: #e66c22;
+    }
+
+    footer {
+      background-color: #3e4a89;
+      color: #fff;
+      padding: 30px 0;
+      text-align: center;
+    }
+
+    footer .sitename {
+      font-weight: 600;
+    }
+
+    #scroll-top {
+      background-color: #ff7c2a;
+      color: #fff;
+      padding: 10px;
+      border-radius: 50%;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    #scroll-top:hover {
+      background-color: #e66c22;
+    }
+
+    /* Form Input Styles */
+    .form-control.input100 {
+      border-radius: 6px;
+      padding: 12px;
+      border: 1px solid #ddd;
+      font-size: 16px;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .form-control.input100:focus {
+      border-color: #ff7c2a;
+      box-shadow: 0 0 10px rgba(255, 124, 42, 0.4);
+    }
+  </style>
+
+</head>
+
+<body class="contact-page">
+
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+
+      <a href="index.html" class="logo d-flex align-items-center">
+        <h1 class="sitename">Epi Scan</h1><span>.</span>
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="{{url_for('first')}}">Home</a></li>
+          <li><a href="{{url_for('index')}}">Upload</a></li>
+           <li><a href="{{url_for('previous')}}">Previous Test</a></li>
+          <li><a href="{{url_for('first')}}">Logout</a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+
+    </div>
+  </header>
+
+  <main class="main">
+
+    <div class="page-title" data-aos="fade">
+      <div class="container position-relative">
+        <h1>Upload</h1>
+        <nav class="breadcrumbs">
+          <ol>
+            <li><a href="{{url_for('first')}}">Home</a></li>
+            <li><a href="{{url_for('login')}}">Login</a></li>
+            <li class="current">Upload</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+
+    <section id="services" class="services section">
+
+      <div class="container-fluid">
+
+        <div class=" row gy-4 d-flex justify-content-center">
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="service-item position-relative">
+              <div class="icon">
+                <i class="fa-solid fa-upload"></i>
+              </div>
+              <h3>Upload the Image:</h3>
+              <form class="login100-form validate-form" action="/submit" method="POST" enctype="multipart/form-data">
+
+                <div class="mb-3">
+                  <input class="form-control input100" name="patient_name" id="patient_name" type="text"
+                    placeholder="Enter Patient Name" required>
+
+                  <input class="form-control input100" name="my_image" id="imagefile" type="file" accept="image/*"
+                    onchange="previewImage();" required>
+
+                  <img id="preview"
+                    style="margin-top: 10px; display: none; margin-left: auto; margin-right: auto; max-height: 200px">
+
+                  <div class="container-login100-form-btn f-flex justify-content-center">
+
+                    <button class="btn btn-warning mt-3" type="submit">Submit</button>
+                  </div>
+                </div>
+
+            </div>
+            </form>
+
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer id="footer" class="footer">
+
+    <div class="container footer-top">
+      <div class="row gy-4">
+        <div class="col-lg-4 col-md-6 footer-about">
+          <a href="index.html" class="logo d-flex align-items-center">
+            <span class="sitename">Epi Scan</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="container copyright text-center mt-4">
+      <p>© <span>Copyright</span> <strong class="px-1 sitename">Epi Scan</strong> <span>All Rights Reserved</span>
+      </p>
+    </div>
+
+  </footer>
+
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+
+  <div id="preloader"></div>
+
+  <script>
+    function previewImage() {
+      var file = document.getElementById("imagefile").files;
+      if (file.length > 0) {
+        var fileReader = new FileReader();
+
+        fileReader.onload = function (event) {
+          var previewImage = document.getElementById("preview");
+          previewImage.style.display = "block";
+          previewImage.setAttribute("src", event.target.result);
+        };
+
+        fileReader.readAsDataURL(file[0]);
+      }
+    }
+
+  </script>
+
+  <script src="../static/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../static/assets/vendor/php-email-form/validate.js"></script>
+  <script src="../static/assets/vendor/aos/aos.js"></script>
+  <script src="../static/assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="../static/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+  <script src="../static/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="../static/assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="../static/assets/vendor/purecounter/purecounter_vanilla.js"></script>
+
+  <script src="../static/assets/js/main.js"></script>
+
+</body>
+
+</html>
