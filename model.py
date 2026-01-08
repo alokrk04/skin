@@ -18,10 +18,10 @@ matplotlib.use('TkAgg')  # Ensure compatibility with PyCharm
 # -----------------------------------
 
 # Load the image data CSV file into a DataFrame
-data = pd.read_csv("D:\DATASET\hmnist_28_28_RGB.csv")
+data = pd.read_csv("/Users/alok/Desktop/skin/DATASET/HAM10000_metadata.csv")
 
 # Load metadata CSV (labels and extra info) into another DataFrame
-meta_df = pd.read_csv("D:\DATASET\HAM10000_metadata.csv")
+meta_df = pd.read_csv("/Users/alok/Desktop/skin/DATASET/HAM10000_metadata.csv")
 
 # Count how many times each diagnosis (dx) appears in metadata
 distribution = meta_df['dx'].value_counts()
