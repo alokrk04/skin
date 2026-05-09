@@ -1,5 +1,5 @@
 # Skin Lesion Classification System
-------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
 A Flask-based web application for automated skin lesion classification using deep learning. This system uses TensorFlow/Keras neural networks to classify skin lesions into 7 different categories with high accuracy.
 
 ## Overview
